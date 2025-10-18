@@ -6,7 +6,7 @@
 	"repository":
 	{
 	  "type": "git",
-	  "url": "https://github.com/FabricaIO/actor-WordClock.git"
+	  "url": "https://github.com/ShVerni/actor-WordClock.git"
 	},
 	"authors":
 	[
@@ -33,6 +33,14 @@
 		"description": "Controls a word clock",
 		"constructor": 
 		[
+			[
+				{
+					"name": "LEDCount",
+					"type": "int",
+					"description": "The number of LEDs in the display",
+					"default": "70"
+				}
+			],
 			[
 				{
 					"name": "Configfile",
