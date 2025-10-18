@@ -25,7 +25,7 @@
 	"frameworks": "arduino",
 	"platforms": "*",
 	"fabricaio" : {
-		"name": "Clock",
+		"name": "WordClock",
 		"type": 1,
 		"category": "light",
 		"libname": "WordClock",

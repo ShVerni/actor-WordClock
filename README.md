@@ -68,7 +68,7 @@ Line up the assembly so that the barrel jack fits in the appropriate hole in the
 ### Software Setup
 
 1. Follow the [Fabirca-IO guide](https://github.com/FabricaIO/FabricaIO-App/wiki/App-Usage#using-the-fabrica-io-app) for installing and setting up the Fabrica-IO app.
-2. Copy the `WordClock.json` file to the project directory and then load the project in the app.
+2. Copy the [WordClock.json](WordClock.json) file to the project directory and then load the project in the app.
 3. Adjust the `NeoPixels` constructor to set the correct `RGB_Type`. For example, if using standard WS2812 LEDs use `NEO_GRB + NEO_KHZ800`, for SK6812 LEDs use `NEO_GRBW + NEO_KHZ800`. See [here](https://github.com/adafruit/Adafruit_NeoPixel/blob/master/Adafruit_NeoPixel.h#L86) for all the options.
 4. Adjust the other device constructors as needed, to set the correct pins if changed.
 3. Compile and flash the program using the Fabrica-IO app.
