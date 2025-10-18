@@ -1,0 +1,46 @@
+{
+	"name": "actor-WordClock",
+	"version": "1.0.0",
+	"description": "Controls an LED word clock",
+	"keywords": "Fabrica-IO, actor, led, output, time",
+	"repository":
+	{
+	  "type": "git",
+	  "url": "https://github.com/FabricaIO/actor-WordClock.git"
+	},
+	"authors":
+	[
+	  {
+		"name": "Sam Groveman",
+		"email": "SamGroveman@outlook.com",
+		"url": "https://github.com/FabricaIO"
+	  }
+	],
+	"dependencies": {
+		"ParameterTrigger": "https://github.com/FabricaIO/util-ParameterTrigger.git",
+		"ActionTrigger": "https://github.com/FabricaIO/util-ActionTrigger.git"
+	  },
+	"license": "GPLv3",
+	"homepage": "https://github.com/FabricaIO",
+	"frameworks": "arduino",
+	"platforms": "*",
+	"fabricaio" : {
+		"name": "Clock",
+		"type": 1,
+		"category": "light",
+		"libname": "WordClock",
+		"includes": ["WordClock"],
+		"description": "Controls a word clock",
+		"constructor": 
+		[
+			[
+				{
+					"name": "Configfile",
+					"type": "String",
+					"description": "The file name to store settings in",
+					"default": "WordClock.json"
+				}
+			]
+		]
+	}
+  }

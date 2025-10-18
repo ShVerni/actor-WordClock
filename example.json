@@ -1,0 +1,6 @@
+{
+  "/settings/config.json": "{\"tasksEnabled\":true,\"period\":300,\"webUsername\":\"Fabrica\",\"webPassword\":\"Fabrica\",\"useNTP\":true,\"ntpUpdatePeriod\":30,\"ntpServer1\":\"pool.ntp.org\",\"ntpServer2\":\"time.google.com\",\"ntpServer3\":\"time.windows.com\",\"gmtOffset\":-18000,\"daylightOffset\":3600,\"WiFiClient\":true,\"configSSID\":\"ESP32Hub_Config\",\"configPW\":\"ESP32Hub\",\"hostname\":\"clock\",\"mdns\":true}",
+  "/settings/act/NeoPixelDisplay.json": "{\"Name\":\"NeoPixelDisplay\",\"Pin\":3,\"LEDCount\":70,\"gammaCorrection\":false,\"RGB_Type\":210}",
+  "/settings/act/WordClock.json": "{\"Name\":\"Clock\",\"NeoPixel_Controller\":{\"current\":\"NeoPixelDisplay\",\"options\":[\"NeoPixelDisplay\"]},\"Brightness_Parameter\":{\"current\":\"LightSensor:Analog Signal\",\"options\":[\"LightSensor:Analog Signal\"]},\"AutoBrightness\":true,\"brightnessMin\":0.01,\"sensorMax\":500,\"sensorMin\":10,\"sensorSmoothing\":0,\"color\":\"0,0,196,255\",\"TaskName\":\"Clock\",\"TaskPeriod\":300}",
+  "/settings/sen/LightSensor.json": "{\"Name\":\"LightSensor\",\"Pin\":2,\"ADC_Voltage_mv\":3300,\"ADC_Resolution\":4096,\"RollingAverage\":true,\"AverageSize\":20}"
+}
