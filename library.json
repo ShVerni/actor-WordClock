@@ -34,14 +34,13 @@
 		"constructor": 
 		[
 			[
+
 				{
 					"name": "LEDCount",
 					"type": "int",
 					"description": "The number of LEDs in the display",
 					"default": "70"
-				}
-			],
-			[
+				},
 				{
 					"name": "Configfile",
 					"type": "String",
