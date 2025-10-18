@@ -35,7 +35,7 @@ Once a device hub is set up, these are the configuration parameters that can be 
 
 ## Making the Project
 ### Major Materials
-1. This project is meant to work with [this clock](https://www.amazon.com/Sharper-Electronic-Contemporary-Housewarming-Decoration/dp/B07NXWXQYH?), any color would work., including [these ones](https://www.amazon.com/Sharper-Image-Electronic-Display-Contemporary/dp/B07CD7S9PZ).
+1. This project is meant to work with [this clock](https://www.amazon.com/Sharper-Electronic-Contemporary-Housewarming-Decoration/dp/B07NXWXQYH?), any color would work, including [these ones](https://www.amazon.com/Sharper-Image-Electronic-Display-Contemporary/dp/B07CD7S9PZ).
 2. An [ESP32-S3 Zero](https://www.aliexpress.us/item/3256806984814685.html) (the C3 version can also work by modifying the pins and the board used by the project in the Fabrica-IO app).
 3. Neopixel compatible LED strip, such as a WS2812 or SK6812 strip.
 4. 3D printed [back plate](Clock-Insert-LED-Back.stl), can also be copied and remixed from [here](https://cad.onshape.com/documents/ec21d4738a26e97d46042a97/w/c5252cd16a113019a0dc78d1/e/b8a84b6399ae58831cb00727) (this is a work in progress, the screw holes don't quite line up still). 
