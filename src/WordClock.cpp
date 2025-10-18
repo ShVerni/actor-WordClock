@@ -32,6 +32,7 @@ bool WordClock::begin() {
 	Description.actionQuantity = 1;
 	Description.type = "Display";
 	Description.actions = {{"update", 0}};
+	Description.version = "1.0.0";
 	task_config.set_taskName(Description.name.c_str());
 	task_config.taskPeriod = 1000;
 	// Create settings directory if necessary
