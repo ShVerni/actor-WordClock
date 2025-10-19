@@ -15,7 +15,7 @@
 #include <vector>
 #include <deque>
 
-/// @brief Allows the use of the LEDC module for controling LED brightness via PWM 
+/// @brief Controls a WordClock display
 class WordClock : public Actor, public PeriodicTask {
 	public:
 		/// @brief Clock settings
@@ -39,7 +39,7 @@ class WordClock : public Actor, public PeriodicTask {
 			std::vector<uint8_t> color {127, 127, 127};			
 		} Clock_config;
 
-		WordClock(String Name, int LEDCount, String configFile = "WordClock.json");
+		WordClock(String Name, String configFile = "WordClock.json");
 		bool begin();
 		std::tuple<bool, String> receiveAction(int action, String payload);
 		String getConfig();
@@ -71,7 +71,7 @@ class WordClock : public Actor, public PeriodicTask {
 		int previousMin = 0;
 
 		/// @brief The total number of LEDs in the display
-		int ledcount;
+		int ledCount = 0;
 
 		/// @brief Stores the current auto brightness value
 		float currentBrightness = 0;
@@ -80,4 +80,5 @@ class WordClock : public Actor, public PeriodicTask {
 		bool updateLEDS(std::vector<std::vector<uint8_t>> RGB_Values);
 		bool updateDisplay(bool force = false);
 		float getBrightness();
+		bool setLEDCount();
 };

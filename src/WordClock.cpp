@@ -4,11 +4,9 @@ extern bool POSTSuccess;
 
 /// @brief Creates a WordClock object
 /// @param Name The device name
-/// @param LEDCount The total number of LEDs in the display
 /// @param configFile The name of the configuration to use
-WordClock::WordClock(String Name, int LEDCount, String configFile) : Actor(Name) {
+WordClock::WordClock(String Name, String configFile) : Actor(Name) {
 	config_path =  "/settings/act/" + configFile;
-	ledcount = LEDCount;
 }
 
 /// @brief Starts the WordClock object
@@ -24,7 +22,7 @@ bool WordClock::begin() {
 		} while (TimeInterface::getEpoch() < 10000 && timeout < 20);
 		// Check if time was set
 		if (TimeInterface::getEpoch() < 10000) {
-			return false;
+			Logger.println("Time was not set by NTP");
 		}
 	}
 	brightness_sensor.parameter_config.Parameters.resize(1);
@@ -176,7 +174,13 @@ bool WordClock::setConfig(String config, bool save) {
 		}
 	}
 	currentBrightness = getBrightness();
-	return enableTask(true) && updateDisplay(true);
+	// Attempt to set LED count in case display has changed
+	if (POSTSuccess && Clock_config.NexoPixel_Controller != "") {
+		if (!setLEDCount() || !updateDisplay()) {
+			return false;
+		}
+	}
+	return enableTask(true);
 }
 
 void WordClock::runTask(ulong elapsed) {
@@ -216,6 +220,12 @@ bool WordClock::updateLEDS(std::vector<std::vector<uint8_t>> RGB_Values) {
 /// @param force Forces a refresh of the display even if the time hasn't changed
 /// @return True on success
 bool WordClock::updateDisplay(bool force) {
+	// Ensure LED count has been set
+	if (ledCount <= 0) {
+		if (!setLEDCount()) {
+			return false;
+		}
+	}
 	if (Clock_config.NexoPixel_Controller != "" && POSTSuccess) {
 		String cur_time = TimeInterface::getFormattedTime("%I:%M");
 		// Get minutes as five minute intervals
@@ -241,7 +251,7 @@ bool WordClock::updateDisplay(bool force) {
 			}
 			
 			previousMin = cur_min;
-			std::vector<std::vector<uint8_t>> colors(ledcount, std::vector<uint8_t>(Clock_config.color.size(), 0));
+			std::vector<std::vector<uint8_t>> colors(ledCount, std::vector<uint8_t>(Clock_config.color.size(), 0));
 			// Set hour display
 			if (cur_min != 0) {
 				// Check if in back half of hour
@@ -330,4 +340,35 @@ float WordClock::getBrightness() {
 	}
 	Logger.println("Brightness sensor not found/not enabled");
 	return 1;
+}
+
+/// @brief Sets the LED count from the associated display
+/// @return True on success
+bool WordClock::setLEDCount() {
+	Logger.println("Getting LED count from display");
+	if (POSTSuccess && Clock_config.NexoPixel_Controller != "") {
+		String displayConfig = ActorManager::getActorConfig(Clock_config.NexoPixel_Controller);
+		if (displayConfig == "") {
+			Logger.println("Display device not found");
+			return false;
+		}
+		// Allocate the JSON document
+		JsonDocument doc;
+		// Deserialize file contents
+		DeserializationError error = deserializeJson(doc, displayConfig);
+		// Test if parsing succeeds.
+		if (error) {
+			Logger.print(F("Deserialization failed: "));
+			Logger.println(error.f_str());
+			return false;
+		}
+		if (!doc["LEDCount"].is<int>()) {
+			Logger.println("Display device is not a valid NeoPixelsController");
+			return false;
+		}
+		ledCount = doc["LEDCount"].as<int>();
+		return true;
+	}
+	Logger.println("Display device not set, or system still booting");
+	return false;
 }
