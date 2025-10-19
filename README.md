@@ -5,7 +5,7 @@ This device provides an interface for a word clock using a strip of [NeoPixel](h
 ![Finished Clock](media/clock.jpg)
 
 ## Dependencies
-This clock depends on the [NexoPixelsController](https://github.com/FabricaIO/actor-NeoPixelsController) and [GenericAalogInput](https://github.com/FabricaIO/sensor-GenericAnalogInput) (if using a photoresistor for brightness control) Fabrica-IO devices, which must also be added to the Fabrica-IO project (see [below](#software-setup)).
+This clock depends on the [NexoPixelsController](https://github.com/FabricaIO/actor-NeoPixelsController) and, if using a photoresistor for brightness control, [GenericAalogInput](https://github.com/FabricaIO/sensor-GenericAnalogInput) Fabrica-IO devices, which must also be added to the Fabrica-IO project (see [below](#software-setup)).
 
 ## Constructor
 The constructor takes three parameters:
@@ -34,15 +34,15 @@ Once a device hub is set up, these are the configuration parameters that can be 
 
 ## Making the Project
 ### Major Materials
-1. This project is meant to work with [this clock](https://www.amazon.com/Sharper-Electronic-Contemporary-Housewarming-Decoration/dp/B07NXWXQYH?), any color would work, including [these ones](https://www.amazon.com/Sharper-Image-Electronic-Display-Contemporary/dp/B07CD7S9PZ).
-2. An [ESP32-S3 Zero](https://www.aliexpress.us/item/3256806984814685.html) (the C3 version can also work by modifying the pins and the board used by the project in the Fabrica-IO app).
+1. This project is meant to work with [this clock](https://www.amazon.com/Sharper-Electronic-Contemporary-Housewarming-Decoration/dp/B07NXWXQYH?), any color would work, including [these ones](https://www.amazon.com/Sharper-Image-Electronic-Display-Contemporary/dp/B07CD7S9PZ). It could also work with a reporoduction of that clock face, or anything else with some modification of the code.
+2. An [ESP32-S3 Zero](https://www.waveshare.com/product/esp32-s3-zero.htm) (also found [here](https://www.aliexpress.us/item/3256806984814685.html)). The C3 version can also work by modifying the pins and the board used by the project in the Fabrica-IO app.
 3. NeoPixel compatible LED strip, such as a WS2812 or SK6812 strip.
 4. 3D printed [back plate](Clock-Insert-LED-Back.stl), can also be copied and remixed from [here](https://cad.onshape.com/documents/ec21d4738a26e97d46042a97/w/c5252cd16a113019a0dc78d1/e/b8a84b6399ae58831cb00727) (this is a work in progress, the screw holes don't quite line up still). 
 5. Optional: You may need to purchase or 3D print diffusers. I found that using a thick rectangle of white filament with a gyroid infill of 30-60% works well. You'll need one properly sized to fit each word segment. I've included an [example](Diffuser.stl) of diffusers that can be placed with the curved side facing the front of the clock. They can still use refining.
 6. Optional: A light sensor such as a [photoresistor](https://www.amazon.com/DIYables-Photocell-Photoresistor-Arduino-Raspberry/dp/B0CM5YNGSF).
 
 > [!WARNING]
-> This is currently only setup to work with an LED strip that has 60 LEDs/m, and therefore is 70-LEDs total for the display. If using an LED strip with a different number of LEDs in each word segment, the code in the [LED range maps](src/WordClock.h#L58) will need to be adjusted.
+> This is currently only setup to work with an LED strip that has 60 LEDs/m, and therefore is 70-LEDs total for the display in the same pattern as shown below. If using an LED strip with a different number of LEDs in each word segment, the code in the [LED range maps](src/WordClock.h#L58) will need to be adjusted.
 
 ### Hardware Setup
 Take apart the clock and remove the circuit board. You can desolder the barrel jack from the included circuit board. Cut and solder all the LEDs together to fit the spaces in the LED insert.
@@ -65,6 +65,9 @@ Program the ESP32 with the Fabrica-IO platform (see [below](#software-setup)) be
 Line up the assembly so that the barrel jack fits in the appropriate hole in the side of the case (you may need to trim off some of the plastic supports to make everything fit). Hot glue can be used to secure the protoboard assembly in place. Screw the clock back together and hang it on the wall or place it wherever. It should be able to use the included power adapter.
 
 ### Software Setup
+
+> [!NOTE]
+> For debugging, you can add the [LEDIndicator](https://github.com/FabricaIO/eventreceiver-LEDIndicator) (on pin 21) and/or the [USBCDCLogger](https://github.com/FabricaIO/logreceiver-USBCDCLogger) devices to the below project setup.  
 
 1. Follow the [Fabirca-IO guide](https://github.com/FabricaIO/FabricaIO-App/wiki/App-Usage#using-the-fabrica-io-app) for installing and setting up the Fabrica-IO app.
 2. Copy the [WordClock.json](WordClock.json) file to the project directory and then load the project in the app.
