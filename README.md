@@ -42,7 +42,7 @@ Once a device hub is set up, these are the configuration parameters that can be 
 6. Optional: A light sensor such as a [photoresistor](https://www.amazon.com/DIYables-Photocell-Photoresistor-Arduino-Raspberry/dp/B0CM5YNGSF).
 
 > [!WARNING]
-> This is currently only setup to work with an LED strip that has 60 LEDs/m, and therefore is 69-LEDs total for the display in the same zig-zag pattern as shown below. If using an LED strip with a different number of LEDs in each word segment, the code in the [LED range maps](src/WordClock.h#L58) will need to be adjusted.
+> This is currently only setup to work with an LED strip that has 60 LEDs/m, and therefore 70-LEDs total for the display in the same zig-zag pattern as shown below. If using an LED strip with a different number of LEDs in each word segment, the code in the [LED range maps](src/WordClock.h#L58) will need to be adjusted.
 
 ### Hardware Setup
 Take apart the clock and remove the circuit board. You can desolder the barrel jack from the included circuit board. Cut and solder all the LEDs together to fit the spaces in the LED insert.
