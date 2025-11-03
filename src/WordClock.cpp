@@ -27,7 +27,6 @@ bool WordClock::begin() {
 	}
 	brightness_sensor.parameter_config.Parameters.resize(1);
 	// Set description
-	Description.actionQuantity = 1;
 	Description.type = "Display";
 	Description.actions = {{"update", 0}};
 	Description.version = "1.0.0";
