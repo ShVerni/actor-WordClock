@@ -49,7 +49,7 @@ bool WordClock::begin() {
 /// @return JSON response with OK or error message
 std::tuple<bool, String> WordClock::receiveAction(int action, String payload) {
 	if (action == 0) {
-		// If tasks not running, sensors won't update, this guarantees a fresh sensor value
+		// If task is not running, sensors won't update, this guarantees a fresh sensor value
 		if (brightness_sensor.parameter_config.Enabled) {
 			SensorManager::takeMeasurement();
 		}
