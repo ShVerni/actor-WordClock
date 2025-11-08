@@ -7,7 +7,7 @@
 #pragma once
 #include <Actor.h>
 #include <PeriodicTask.h>
-#include <ParameterTrigger.h>
+#include <ParameterGetter.h>
 #include <ActionTrigger.h>
 #include <TimeInterface.h>
 #include <Configuration.h>
@@ -36,7 +36,10 @@ class WordClock : public Actor, public PeriodicTask {
 			int sensorSmoothing = 5;
 
 			/// @brief The current color of the display
-			std::vector<uint8_t> color {127, 127, 127};			
+			std::vector<uint8_t> color {127, 127, 127};
+
+			/// @brief Enables automatic brightness control
+			bool AutoBrightness = false;
 		} Clock_config;
 
 		WordClock(String Name, String configFile = "WordClock.json");
@@ -50,7 +53,7 @@ class WordClock : public Actor, public PeriodicTask {
 		String config_path;
 
 		/// @brief Parameter trigger object for getting brightness
-		ParameterTrigger brightness_sensor;
+		ParameterGetter brightness_sensor;
 
 		/// @brief Allows for setting the LED colors
 		ActionTrigger display_controller;

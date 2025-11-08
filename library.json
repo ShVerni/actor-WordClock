@@ -17,7 +17,7 @@
 	  }
 	],
 	"dependencies": {
-		"ParameterTrigger": "https://github.com/FabricaIO/util-ParameterTrigger.git",
+		"ParameterGetter": "https://github.com/FabricaIO/util-ParameterGetter.git",
 		"ActionTrigger": "https://github.com/FabricaIO/util-ActionTrigger.git"
 	  },
 	"license": "GPLv3",

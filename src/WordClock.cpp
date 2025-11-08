@@ -25,7 +25,7 @@ bool WordClock::begin() {
 			Logger.println("Time was not set by NTP");
 		}
 	}
-	brightness_sensor.parameter_config.Parameters.resize(1);
+	brightness_sensor.Parameters.resize(1);
 	// Set description
 	Description.type = "Display";
 	Description.actions = {{"update", 0}};
@@ -49,7 +49,7 @@ bool WordClock::begin() {
 std::tuple<bool, String> WordClock::receiveAction(int action, String payload) {
 	if (action == 0) {
 		// If task is not running, sensors won't update, this guarantees a fresh sensor value
-		if (brightness_sensor.parameter_config.Enabled) {
+		if (Clock_config.AutoBrightness) {
 			SensorManager::takeMeasurement();
 		}
 		if (updateDisplay(true)) {
@@ -78,7 +78,7 @@ String WordClock::getConfig() {
 		}
 	}
 	// Add all sensor options to dropdown
-	doc["Brightness_Parameter"]["current"] = brightness_sensor.parameter_config.Parameters.size() > 0 ? brightness_sensor.parameter_config.Parameters[0].first + ":" + brightness_sensor.parameter_config.Parameters[0].second : "";
+	doc["Brightness_Parameter"]["current"] = brightness_sensor.Parameters.size() > 0 ? brightness_sensor.Parameters[0].first + ":" + brightness_sensor.Parameters[0].second : "";
 	std::map<String, std::vector<String>> sensors = brightness_sensor.listAllParameters();
 	if (sensors.size() > 0) {
 		i = 0;
@@ -92,7 +92,7 @@ String WordClock::getConfig() {
 		doc["Brightness_Parameter"]["options"][0] = "";
 	}
 
-	doc["AutoBrightness"] = brightness_sensor.parameter_config.Enabled;
+	doc["AutoBrightness"] = Clock_config.AutoBrightness;
 	doc["brightnessMin"] = Clock_config.brightnessMin;
 	doc["sensorMax"] = Clock_config.sensorMax;
 	doc["sensorMin"] = Clock_config.sensorMin;
@@ -160,9 +160,9 @@ bool WordClock::setConfig(String config, bool save) {
 	int colon;
 	if ((colon = brightness_combined.indexOf(':')) != -1) {
 		std::pair<String, String> chosen {brightness_combined.substring(0, colon), brightness_combined.substring(colon + 1)};
-		brightness_sensor.parameter_config.Parameters[0] = chosen;
+		brightness_sensor.Parameters[0] = chosen;
 	}
-	brightness_sensor.parameter_config.Enabled = doc["AutoBrightness"].as<bool>();
+	Clock_config.AutoBrightness = doc["AutoBrightness"].as<bool>();
 	enableTask(false);
 	task_config.set_taskName(Description.name.c_str());
 	task_config.taskPeriod = doc["TaskPeriod"].as<ulong>();
@@ -231,7 +231,7 @@ bool WordClock::updateDisplay(bool force) {
 		int cur_min = (cur_time.substring(cur_time.indexOf(':') + 1).toInt() / 5) * 5;
 
 		// Check if display brightness needs updating
-		if (brightness_sensor.parameter_config.Enabled) {
+		if (Clock_config.AutoBrightness) {
 			float new_brightness = getBrightness();
 			if (new_brightness != currentBrightness) {
 				currentBrightness = new_brightness;
@@ -243,7 +243,7 @@ bool WordClock::updateDisplay(bool force) {
 		if (force || cur_min != previousMin) {
 			int cur_hour = cur_time.substring(0, cur_time.indexOf(':')).toInt();
 			std::vector<uint8_t> color_final = Clock_config.color;
-			if (brightness_sensor.parameter_config.Enabled) {
+			if (Clock_config.AutoBrightness) {
 				for (auto& c : color_final) {
 					c = std::round((float)c * currentBrightness);
 				}
@@ -308,9 +308,9 @@ bool WordClock::updateDisplay(bool force) {
 float WordClock::getBrightness() {
 	std::map<String, std::map<String, double>> params = brightness_sensor.getParameterValues();
 	// Ensure the desired parameter exists 
-	if (brightness_sensor.parameter_config.Enabled && params.size() > 0) {
+	if (Clock_config.AutoBrightness && params.size() > 0) {
 		// Obtain and constrain the measurement
-		double value = params[brightness_sensor.parameter_config.Parameters[0].first][brightness_sensor.parameter_config.Parameters[0].second];
+		double value = params[brightness_sensor.Parameters[0].first][brightness_sensor.Parameters[0].second];
 		value = constrain(value, Clock_config.sensorMin, Clock_config.sensorMax);
 		// Calculate the percent of the reading proportionally to the min/max range
 		double newvalue = std::round(((value - Clock_config.sensorMin) / (Clock_config.sensorMax - Clock_config.sensorMin)) * 100) / 100;
