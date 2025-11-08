@@ -26,13 +26,13 @@ class WordClock : public Actor, public PeriodicTask {
 			/// @brief The minimum percent brightness of the display
 			float  brightnessMin = 0.1;
 
-			/// @brief The sensor value at which the brightness is set the minimum
+			/// @brief The sensor value at which the brightness is set to the minimum
 			float sensorMin = 0.5;
 
 			/// @brief The sensor value at which brightness is set to 100% (1)
 			float sensorMax = 30000;
 
-			/// @brief The size of the rolling average to use to smooth brightness
+			/// @brief The size of the rolling average to use to smooth brightness (0 disables)
 			int sensorSmoothing = 5;
 
 			/// @brief The current color of the display
