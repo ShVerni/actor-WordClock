@@ -211,7 +211,7 @@ bool WordClock::updateLEDS(std::vector<std::vector<uint8_t>> RGB_Values) {
 	serializeJson(doc, rgb_payload);
 	std::map<String, std::map<String, String>> payload;
 	Logger.println("Display updating");
-	payload[Clock_config.NexoPixel_Controller] = {{"setcolor", rgb_payload}};
+	payload[Clock_config.NexoPixel_Controller] = {{"setColor", rgb_payload}};
 	return display_controller.triggerActions(payload);
 }
 
