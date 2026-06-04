@@ -44,7 +44,7 @@ class WordClock : public Actor, public PeriodicTask {
 
 		WordClock(String Name, String configFile = "WordClock.json");
 		bool begin();
-		std::tuple<bool, String> receiveAction(int action, String payload);
+		std::pair<bool, String> receiveAction(const int action, const String& payload = "");
 		String getConfig();
 		bool setConfig(String config, bool save);
 

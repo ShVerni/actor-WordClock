@@ -46,7 +46,7 @@ bool WordClock::begin() {
 /// @param action The action to process 
 /// @param payload 
 /// @return JSON response with OK or error message
-std::tuple<bool, String> WordClock::receiveAction(int action, String payload) {
+std::pair<bool, String> WordClock::receiveAction(const int action, const String& payload) {
 	if (action == 0) {
 		// If task is not running, sensors won't update, this guarantees a fresh sensor value
 		if (Clock_config.AutoBrightness) {
