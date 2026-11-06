@@ -12,10 +12,10 @@ WordClock::WordClock(String Name, String configFile) : Actor(Name) {
 /// @brief Starts the WordClock object
 /// @return True on success
 bool WordClock::begin() {
+	display_controller.actions_config.Enabled = true;
 	if (Configuration::currentConfig.useNTP) {
 		// Waits for time to be set
 		int timeout = 0;
-		display_controller.actions_config.Enabled = true;
 		do {
 			delay(1000);
 			timeout++;
@@ -48,6 +48,7 @@ bool WordClock::begin() {
 /// @return JSON response with OK or error message
 std::pair<bool, String> WordClock::receiveAction(const int action, const String& payload) {
 	if (action == 0) {
+		std::lock_guard<std::mutex> lock(clockMutex);
 		// If task is not running, sensors won't update, this guarantees a fresh sensor value
 		if (Clock_config.AutoBrightness) {
 			SensorManager::takeMeasurement();
@@ -63,6 +64,7 @@ std::pair<bool, String> WordClock::receiveAction(const int action, const String&
 /// @brief Gets the current config
 /// @return A JSON string of the config
 String WordClock::getConfig() {
+	std::lock_guard<std::mutex> lock(clockMutex);
 	// Allocate the JSON document
 	JsonDocument doc;
 	// Assign current values
@@ -120,7 +122,7 @@ String WordClock::getConfig() {
 /// @param save If the configuration should be saved to a file
 /// @return True on success
 bool WordClock::setConfig(String config, bool save) {
-	Serial.println(config);
+	std::lock_guard<std::mutex> lock(clockMutex);
 	// Allocate the JSON document
   	JsonDocument doc;
 	// Deserialize file contents
@@ -172,7 +174,6 @@ bool WordClock::setConfig(String config, bool save) {
 			return false;
 		}
 	}
-	currentBrightness = getBrightness();
 	// Attempt to set LED count in case display has changed
 	if (POSTSuccess && Clock_config.NexoPixel_Controller != "") {
 		if (!setLEDCount() || !updateDisplay()) {
@@ -184,6 +185,7 @@ bool WordClock::setConfig(String config, bool save) {
 
 void WordClock::runTask(ulong elapsed) {
 	if (taskPeriodTriggered(elapsed)) {
+		std::lock_guard<std::mutex> lock(clockMutex);
 		updateDisplay();
 	}
 }
@@ -231,24 +233,23 @@ bool WordClock::updateDisplay(bool force) {
 		int cur_min = (cur_time.substring(cur_time.indexOf(':') + 1).toInt() / 5) * 5;
 
 		// Check if display brightness needs updating
+		std::vector<uint8_t> color_final = Clock_config.color;
 		if (Clock_config.AutoBrightness) {
-			float new_brightness = getBrightness();
-			if (new_brightness != currentBrightness) {
-				currentBrightness = new_brightness;
-				force = true;
+			float currentBrightness = getBrightness();
+			for (auto& c : color_final) {
+				c = std::round((float)c * currentBrightness);
 			}
+		}
+
+		// Only redraw when the scaled color actually changes
+		if (color_final != previousColor) {
+			previousColor = color_final;
+			force = true;
 		}
 
 		// Check if clock display update is necessary
 		if (force || cur_min != previousMin) {
-			int cur_hour = cur_time.substring(0, cur_time.indexOf(':')).toInt();
-			std::vector<uint8_t> color_final = Clock_config.color;
-			if (Clock_config.AutoBrightness) {
-				for (auto& c : color_final) {
-					c = std::round((float)c * currentBrightness);
-				}
-			}
-			
+			int cur_hour = cur_time.substring(0, cur_time.indexOf(':')).toInt();			
 			previousMin = cur_min;
 			std::vector<std::vector<uint8_t>> colors(ledCount, std::vector<uint8_t>(Clock_config.color.size(), 0));
 			// Set hour display

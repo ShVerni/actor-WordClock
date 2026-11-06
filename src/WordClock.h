@@ -14,7 +14,8 @@
 #include <map>
 #include <vector>
 #include <deque>
-
+#include <mutex>
+		
 /// @brief Controls a WordClock display
 class WordClock : public Actor, public PeriodicTask {
 	public:
@@ -58,6 +59,12 @@ class WordClock : public Actor, public PeriodicTask {
 		/// @brief Allows for setting the LED colors
 		ActionTrigger display_controller;
 
+		/// @brief Holds the previous color displayed on the clock
+		std::vector<uint8_t> previousColor;
+
+		/// @brief Serializes display updates and config changes between the task and web threads
+		std::mutex clockMutex;
+
 		/// @brief Map of LED ranges for each hour
 		std::map<uint8_t, std::array<uint8_t, 2>> hours {{1, {13, 14}}, {2, {29, 30}}, {3, {9, 12}}, {4, {41, 43}}, {5, {26, 28}}, {6, {7, 8}}, {7, {36, 38}}, {8, {20, 22}}, {9, {23, 25}}, {10, {5, 6}}, {11, {15, 19}}, {12, {31, 35}}};
 		
@@ -75,9 +82,6 @@ class WordClock : public Actor, public PeriodicTask {
 
 		/// @brief The total number of LEDs in the display
 		int ledCount = 0;
-
-		/// @brief Stores the current auto brightness value
-		float currentBrightness = 0;
 
 		void runTask(ulong elapsed);
 		bool updateLEDS(std::vector<std::vector<uint8_t>> RGB_Values);
